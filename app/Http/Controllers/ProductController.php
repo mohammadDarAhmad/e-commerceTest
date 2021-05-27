@@ -24,6 +24,7 @@ class ProductController extends Controller
 
         $validator = Validator::make($data, [
                 'order_id' => 'required|exists:orders,id',
+                'name' => 'required|string'
             ]
         );
 
@@ -40,7 +41,9 @@ class ProductController extends Controller
     {
         $data = $request->all();
         $validator = Validator::make($data, [
-                'order_id' => 'required|exists:orders,id',
+                'order_id' => 'exists:orders,id',
+                'name' => 'string'
+
             ]
         );
 

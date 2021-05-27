@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Delivery;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class DeliveryController extends Controller
 {
@@ -20,6 +21,16 @@ class DeliveryController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
+
+        $validator = Validator::make($data, [
+                'name' => 'required|string'
+            ]
+        );
+
+        if ($validator->fails()) {
+            return $validator->errors();
+        }
+        $data = $request->all();
         Delivery::query()->create($data);
         return 'Success';
 
@@ -28,6 +39,16 @@ class DeliveryController extends Controller
 
     public function update(Request $request, Delivery $delivery)
     {
+        $data = $request->all();
+
+        $validator = Validator::make($data, [
+                'name' => 'string'
+            ]
+        );
+
+        if ($validator->fails()) {
+            return $validator->errors();
+        }
         $data = $request->all();
         $delivery->update($data);
         return 'Success';

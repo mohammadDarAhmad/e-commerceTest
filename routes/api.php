@@ -22,7 +22,6 @@ Route::resource('deliveries', DeliveryController::class);
 Route::resource('orders', OrderController::class);
 Route::resource('products', ProductController::class);
 
-
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
