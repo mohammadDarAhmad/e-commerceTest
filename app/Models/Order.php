@@ -11,13 +11,11 @@ class Order extends Model
 
     protected $fillable = ['name', "customer_id", "delivery_id"];
 
-    public function customer()
+
+
+    public function products()
     {
-        return $this->hasOne(Customer::class);
+        return $this->hasMany(ProductsOrder::class);
     }
 
-    public function delivery()
-    {
-        return $this->hasOne(Delivery::class);
-    }
 }

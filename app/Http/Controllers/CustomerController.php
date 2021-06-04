@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CustomerCollection;
+use App\Http\Resources\CustomerResource;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -10,13 +12,16 @@ class CustomerController extends Controller
 {
     public function index(Request $request)
     {
-        return Customer::query()->get();
+        $customers = Customer::query()->with('orders')->get();
+        return general_response(new CustomerCollection($customers));
+
     }
 
     public function show(Customer $customer)
     {
+        $customer = $customer->with('orders')->first();
+        return general_response(new CustomerResource($customer));
 
-        return $customer;
     }
 
     public function store(Request $request)
@@ -33,7 +38,8 @@ class CustomerController extends Controller
         }
         $data = $request->all();
         Customer::query()->create($data);
-        return 'Success';
+        return general_response([], 'Success');
+
     }
 
 
@@ -51,7 +57,8 @@ class CustomerController extends Controller
         }
         $data = $request->all();
         $customer->update($data);
-        return 'Success';
+        return general_response([], 'Success');
+
     }
 
     public function destroy(Customer $customer)
@@ -69,6 +76,7 @@ class CustomerController extends Controller
             logger($e->getMessage());
         }
 
-        return 'Success';
+        return general_response([], 'Success');
+
     }
 }

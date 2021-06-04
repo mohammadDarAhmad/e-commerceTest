@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\DeliveryCollection;
+use App\Http\Resources\DeliveryResource;
 use App\Models\Delivery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -10,12 +12,16 @@ class DeliveryController extends Controller
 {
     public function index(Request $request)
     {
-        return Delivery::query()->get();
+        $delivers = Delivery::query()->with('orders')->get();
+        return general_response(new DeliveryCollection($delivers));
+
     }
 
     public function show(Delivery $delivery)
     {
         return $delivery;
+        return general_response(new DeliveryResource($delivery));
+
     }
 
     public function store(Request $request)
@@ -32,7 +38,7 @@ class DeliveryController extends Controller
         }
         $data = $request->all();
         Delivery::query()->create($data);
-        return 'Success';
+        return general_response([], 'Success');
 
     }
 
@@ -51,7 +57,7 @@ class DeliveryController extends Controller
         }
         $data = $request->all();
         $delivery->update($data);
-        return 'Success';
+        return general_response([], 'Success');
     }
 
     public function destroy(Delivery $delivery)
@@ -66,6 +72,6 @@ class DeliveryController extends Controller
             logger($e->getMessage());
         }
 
-        return 'Success';
+        return general_response([], 'Success');
     }
 }
